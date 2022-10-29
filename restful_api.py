@@ -16,12 +16,14 @@ bookings = [
 
 parser = reqparse.RequestParser()
 
+opening_times = [ str(hour) for hour in range(9,18) ]
 
 class BookingsList(Resource):
     def get(self):
         return bookings
 
     def post(self):
+        #TODO Check for clashes with other users
         parser.add_argument("booking_id", type=str)
         parser.add_argument("name", type=str)
         parser.add_argument("date", type=str)
@@ -44,15 +46,18 @@ class BookingsList(Resource):
         except ValueError:
             return "Wrong date format, must be in the form dd-mm-yyyy", 404
         else:
-            # TODO Check time format
-            new_booking = {
-                "booking_id": args["booking_id"],
-                "name": args["name"],
-                "date": args["date"],
-                "time": args["time"],
-            }
-            bookings.append(new_booking)
-            return request.get_json(), 201
+            if args['time'] in opening_times:
+                # Time given by user is within opening times
+                new_booking = {
+                    "booking_id": args["booking_id"],
+                    "name": args["name"],
+                    "date": args["date"],
+                    "time": args["time"],
+                }
+                bookings.append(new_booking)
+                return request.get_json(), 201
+            else:
+                return "Time selected is not within opening times, please enter an integer from 9 to 17", 404
 
 
 class Booking(Resource):
@@ -77,10 +82,12 @@ class Booking(Resource):
                 except ValueError:
                     return "Wrong date format, must be in the form dd-mm-yyyy", 404
                 else:
-                    # TODO Check time format
-                    booking["date"] = args["date"]
-                    booking["time"] = args["time"]
-                    return booking, 200
+                    if args['time'] in opening_times:
+                        booking["date"] = args["date"]
+                        booking["time"] = args["time"]
+                        return booking, 200
+                    else:
+                        return "Time selected is not within opening times, please enter an integer from 9 to 17", 404
         return "Booking ID does not exist", 404
 
     def delete(self, booking_id):

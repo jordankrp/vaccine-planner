@@ -72,7 +72,6 @@ def generate_booking_id(bookings):
     booking_id = random.choice([i for i in range(0,9999) if i not in existing_ids])
     return booking_id
 
-
 def display_booking(booking_id):
     get_req = requests.get(f"http://localhost:5000/bookings/{booking_id}")
     if get_req.status_code == 200:
@@ -89,6 +88,7 @@ def add_new_booking(booking_id, name, date, time):
     query = {"booking_id": str(booking_id), "name": str(name), "date": str(date), "time": str(time)}
     post_req = requests.post("http://localhost:5000/bookings", json=query)
     if post_req.status_code == 201:
+        print()
         print("New booking added successfully")
         display_booking(booking_id)
     else:
@@ -98,6 +98,7 @@ def update_booking(booking_id, date, time):
     query = {"date": date, "time": time}
     put_req = requests.put(f"http://localhost:5000/bookings/{booking_id}", json=query)
     if put_req.status_code == 200:
+        print()
         print(f"Booking with ID {booking_id} updated successfully")
         display_booking(booking_id)
     else:
@@ -106,6 +107,7 @@ def update_booking(booking_id, date, time):
 def delete_booking(booking_id):
     delete_req = requests.delete(f"http://localhost:5000/bookings/{booking_id}")
     if delete_req.status_code == 204:
+        print()
         print(f"Booking with ID {booking_id} deleted successfully")
     else:
         print(delete_req.text)
@@ -120,7 +122,7 @@ if __name__ == "__main__":
         name = get_name()
         date = get_date()
         time = get_time()
-        # generate booking ID for now
+        # generate booking ID
         bookings = get_bookings()
         booking_id = generate_booking_id(bookings)
         add_new_booking(booking_id, name, date, time)
