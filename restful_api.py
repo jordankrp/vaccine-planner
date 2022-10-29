@@ -36,7 +36,6 @@ class BookingsList(Resource):
         else:
             for booking in bookings:
                 if args["name"] == booking["name"] or args["booking_id"] == booking["booking_id"]:
-                    # TODO Maybe need to take an action for re-booking
                     return f"Booking ID or name already exists.", 404
 
         # Check if date is in correct format (DD-MM-YYYY)
@@ -45,7 +44,7 @@ class BookingsList(Resource):
         except ValueError:
             return "Wrong date format, must be in the form dd-mm-yyyy", 404
         else:
-            # TODO Check if there is a time clash
+            # TODO Check time format
             new_booking = {
                 "booking_id": args["booking_id"],
                 "name": args["name"],
@@ -65,7 +64,6 @@ class Booking(Resource):
 
     # Update an existing booking
     # Restrict date format to dd-mm-yyyy
-    # TODO Fix this method
     def put(self, booking_id):
         parser.add_argument("date", type=str)
         parser.add_argument("time", type=str)
