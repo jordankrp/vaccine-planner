@@ -8,6 +8,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  webserver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Prepare virtual env'
+        run: python3 -m venv qilimanjaro_venv && source qilimanjaro_venv/bin/activate
+      - name: 'Install requirements'
+        run: pip3 install -r requirements.txt
+      - name: 'Run webserver'
+        run: python3 restful_api.py   
   ci:
     runs-on: ubuntu-latest
     steps:
@@ -21,8 +31,6 @@ jobs:
       - name: 'Run linter'
         run: flake8 --count --statistics --show-source .
       - name: 'Run webserver'
-        shell: bash
         run: python3 restful_api.py
       - name: 'Run unit tests'
-        shell: bash
         run: python3 unit_tests.py
