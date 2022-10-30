@@ -15,13 +15,14 @@ class TestAPI(unittest.TestCase):
     }
 
     new_booking = {
-        "booking_id": "1020",
+        "booking_id": "1022",
         "name": "Joe Pass",
         "date": "15-11-2022",
         "time": "13",
     }
 
     update_booking = {"date": "30-11-2022", "time": "12"}
+    update_booking_original = {"date": "01-11-2022", "time": "10"}
 
     updated_booking_1021 = {
         "booking_id": "1021",
@@ -64,7 +65,7 @@ class TestAPI(unittest.TestCase):
         print("Test 3 completed")
 
     def test_4_delete_booking(self):
-        resp = requests.delete(self.BOOKINGS + "/1020")
+        resp = requests.delete(self.BOOKINGS + "/1022")
         self.assertEqual(resp.status_code, 204)
         print("Test 4 completed")
 
@@ -95,6 +96,11 @@ class TestAPI(unittest.TestCase):
             resp.json(), "Wrong date format, must be in the form dd-mm-yyyy"
         )
         print("Test 8 completed")
+    
+    def test_9_update_booking_back(self):
+        resp = requests.put(self.BOOKINGS + "/1021", json=self.update_booking_original)
+        self.assertDictEqual(resp.json(), self.booking_1021)
+        print("Test 9 completed")
 
 
 if __name__ == "__main__":
@@ -108,3 +114,4 @@ if __name__ == "__main__":
     tester.test_6_wrong_booking_id()
     tester.test_7_update_wrong_booking_time()
     tester.test_8_post_wrong_date_format()
+    tester.test_9_update_booking_back()

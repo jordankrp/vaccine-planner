@@ -5,6 +5,7 @@ from datetime import datetime
 app = Flask(__name__)
 api = Api(app)
 
+# Give an example booking to start with
 bookings = [
     {"booking_id": "1021", "name": "Miles Davis", "date": "01-11-2022", "time": "10"}
 ]
