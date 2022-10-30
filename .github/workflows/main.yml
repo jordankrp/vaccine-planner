@@ -20,5 +20,9 @@ jobs:
         run: black --check --diff .
       - name: 'Run linter'
         run: flake8 --count --statistics --show-source .
+      - name: 'Run webserver'
+        run: python3 restful_api.py
       - name: 'Run unit tests'
-        run: python3 unit_tests.py
+        run: |
+          sleep 10 &&
+          python3 unit_tests.py
