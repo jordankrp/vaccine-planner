@@ -7,7 +7,7 @@ options_menu = [
     "Request new booking",
     "Display existing booking",
     "Modify existing booking",
-    "Delete booking"
+    "Delete booking",
 ]
 
 term = Terminal()
@@ -39,11 +39,13 @@ def get_booking_id():
     answer = prompt({"type": "input", "name": "booking_id", "message": "Booking ID:"})
     return str(answer["booking_id"])
 
+
 def get_name():
     print()
     print(term.underline("Please type in your Name and Surname"))
     answer = prompt({"type": "input", "name": "name", "message": "Name and Surname:"})
     return str(answer["name"])
+
 
 def get_date():
     print()
@@ -51,11 +53,13 @@ def get_date():
     answer = prompt({"type": "input", "name": "date", "message": "Booking date:"})
     return str(answer["date"])
 
+
 def get_time():
     print()
     print(term.underline("Please type in the booking time"))
     answer = prompt({"type": "input", "name": "time", "message": "Booking time:"})
     return str(answer["time"])
+
 
 def get_bookings():
     get_req = requests.get(f"http://localhost:5000/bookings")
@@ -65,12 +69,14 @@ def get_bookings():
     else:
         return get_req.text
 
+
 def generate_booking_id(bookings):
     existing_ids = []
     for booking in bookings:
-        existing_ids.append(booking['booking_id'])
-    booking_id = random.choice([i for i in range(0,9999) if i not in existing_ids])
+        existing_ids.append(booking["booking_id"])
+    booking_id = random.choice([i for i in range(0, 9999) if i not in existing_ids])
     return booking_id
+
 
 def display_booking(booking_id):
     get_req = requests.get(f"http://localhost:5000/bookings/{booking_id}")
@@ -84,8 +90,14 @@ def display_booking(booking_id):
     else:
         print(get_req.text)
 
+
 def add_new_booking(booking_id, name, date, time):
-    query = {"booking_id": str(booking_id), "name": str(name), "date": str(date), "time": str(time)}
+    query = {
+        "booking_id": str(booking_id),
+        "name": str(name),
+        "date": str(date),
+        "time": str(time),
+    }
     post_req = requests.post("http://localhost:5000/bookings", json=query)
     if post_req.status_code == 201:
         print()
@@ -93,6 +105,7 @@ def add_new_booking(booking_id, name, date, time):
         display_booking(booking_id)
     else:
         print(post_req.text)
+
 
 def update_booking(booking_id, date, time):
     query = {"date": date, "time": time}
@@ -104,6 +117,7 @@ def update_booking(booking_id, date, time):
     else:
         print(put_req.text)
 
+
 def delete_booking(booking_id):
     delete_req = requests.delete(f"http://localhost:5000/bookings/{booking_id}")
     if delete_req.status_code == 204:
@@ -111,6 +125,7 @@ def delete_booking(booking_id):
         print(f"Booking with ID {booking_id} deleted successfully")
     else:
         print(delete_req.text)
+
 
 if __name__ == "__main__":
 

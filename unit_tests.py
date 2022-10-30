@@ -11,14 +11,14 @@ class TestAPI(unittest.TestCase):
         "booking_id": "1021",
         "name": "Miles Davis",
         "date": "01-11-2022",
-        "time": "10"
+        "time": "10",
     }
 
     new_booking = {
         "booking_id": "1020",
         "name": "Joe Pass",
         "date": "15-11-2022",
-        "time": "13"
+        "time": "13",
     }
 
     update_booking = {"date": "30-11-2022", "time": "12"}
@@ -27,7 +27,7 @@ class TestAPI(unittest.TestCase):
         "booking_id": "1021",
         "name": "Miles Davis",
         "date": "30-11-2022",
-        "time": "12"
+        "time": "12",
     }
 
     wrong_booking_time = {"date": "30-11-2022", "time": "19"}
@@ -36,14 +36,14 @@ class TestAPI(unittest.TestCase):
         "booking_id": "1012",
         "name": "Dizzy Gillespie",
         "date": "29-06-2022",
-        "time": "12"
+        "time": "12",
     }
 
     booking_wrong_date = {
         "booking_id": "1018",
         "name": "Oscar Peterson",
         "date": "2022-08-07",
-        "time": "11"
+        "time": "11",
     }
 
     def test_1_get_all_bookings(self):
@@ -82,7 +82,10 @@ class TestAPI(unittest.TestCase):
     def test_7_update_wrong_booking_time(self):
         resp = requests.put(self.BOOKINGS + "/1021", json=self.wrong_booking_time)
         self.assertEqual(resp.status_code, 404)
-        self.assertEqual(resp.json(), "Time selected is not within opening times, please enter an integer from 9 to 17")
+        self.assertEqual(
+            resp.json(),
+            "Time selected is not within opening times, please enter an integer from 9 to 17",
+        )
         print("Test 7 completed")
 
     def test_8_post_wrong_date_format(self):
