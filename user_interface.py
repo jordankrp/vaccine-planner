@@ -62,7 +62,7 @@ def get_time():
 
 
 def get_bookings():
-    get_req = requests.get(f"http://localhost:5000/bookings")
+    get_req = requests.get("http://localhost:5000/bookings")
     if get_req.status_code == 200:
         bookings = get_req.json()
         return bookings

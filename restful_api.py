@@ -42,7 +42,7 @@ class BookingsList(Resource):
                     args["name"] == booking["name"]
                     or args["booking_id"] == booking["booking_id"]
                 ):
-                    return f"Booking ID or name already exists.", 404
+                    return "Booking ID or name already exists.", 404
 
         # Check if date is in correct format (DD-MM-YYYY)
         try:
