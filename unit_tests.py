@@ -96,7 +96,7 @@ class TestAPI(unittest.TestCase):
             resp.json(), "Wrong date format, must be in the form dd-mm-yyyy"
         )
         print("Test 8 completed")
-    
+
     def test_9_update_booking_back(self):
         resp = requests.put(self.BOOKINGS + "/1021", json=self.update_booking_original)
         self.assertDictEqual(resp.json(), self.booking_1021)
