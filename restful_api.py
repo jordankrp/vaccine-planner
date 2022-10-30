@@ -8,9 +8,9 @@ api = Api(app)
 bookings = [
     {
         "booking_id": "1021",
-        "name": "John Smith",
+        "name": "Miles Davis",
         "date": "01-11-2022",
-        "time": "12:00"
+        "time": "10"
     }
 ]
 
@@ -67,7 +67,7 @@ class Booking(Resource):
                 return booking
         return "Booking ID does not exist", 404
 
-    # Update an existing booking
+    # Update an existing booking.
     # Restrict date format to dd-mm-yyyy
     def put(self, booking_id):
         parser.add_argument("date", type=str)
