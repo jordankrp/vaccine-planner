@@ -1,5 +1,8 @@
 import requests
 import unittest
+from flask import Flask
+from flask_restful import Api
+from restful_api import BookingsList, Booking, app
 
 
 class TestAPI(unittest.TestCase):
@@ -104,6 +107,8 @@ class TestAPI(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    #app.run(debug=True)
+    #unittest.main()
     tester = TestAPI()
 
     tester.test_1_get_all_bookings()
