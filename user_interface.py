@@ -1,5 +1,6 @@
 import requests
 import random
+import sys
 from blessed import Terminal
 from PyInquirer import prompt
 
@@ -47,6 +48,13 @@ def get_name():
     return str(answer["name"])
 
 
+def get_email():
+    print()
+    print(term.underline("Please type in your email address"))
+    answer = prompt({"type": "input", "name": "email", "message": "Email address:"})
+    return str(answer["email"])
+
+
 def get_date():
     print()
     print(term.underline("Please type in the booking date"))
@@ -78,6 +86,26 @@ def generate_booking_id(bookings):
     return booking_id
 
 
+def name_auth(bookings, booking_id, name):
+    auth = False
+    for booking in bookings:
+        if booking["booking_id"] == booking_id:
+            if booking["name"] == name:
+                auth = True
+    return auth
+
+
+def booking_clash(bookings, date, time):
+    clash = False
+    for booking in bookings:
+        # TODO Need to account for 01-11 and 1-11
+        if booking["date"] == date:
+            if booking["time"] == time:
+                print("Selected time is already taken on this date")
+                clash = True
+    return clash
+
+
 def display_booking(booking_id):
     get_req = requests.get(f"http://localhost:5000/bookings/{booking_id}")
     if get_req.status_code == 200:
@@ -91,10 +119,11 @@ def display_booking(booking_id):
         print(get_req.text)
 
 
-def add_new_booking(booking_id, name, date, time):
+def add_new_booking(booking_id, name, email, date, time):
     query = {
         "booking_id": str(booking_id),
         "name": str(name),
+        "email": str(email),
         "date": str(date),
         "time": str(time),
     }
@@ -135,17 +164,27 @@ if __name__ == "__main__":
     if input_prompt["action"] == options_menu[0]:
         # Request new booking
         name = get_name()
+        email = get_email()
         date = get_date()
         time = get_time()
-        # generate booking ID
+        # Check if there is a date / time clash
         bookings = get_bookings()
+        if booking_clash(bookings, date, time):
+            sys.exit()
+        # generate booking ID
         booking_id = generate_booking_id(bookings)
-        add_new_booking(booking_id, name, date, time)
+        add_new_booking(booking_id, name, email, date, time)
+        # Send email confirmation to user (using Flask mail or similar)
     elif input_prompt["action"] == options_menu[1]:
         # View existing booking details
         booking_id = get_booking_id()
+        name = get_name()
+        bookings = get_bookings()
         # Some sort of name authentication
-        display_booking(booking_id)
+        if name_auth(bookings, booking_id, name):
+            display_booking(booking_id)
+        else:
+            print("Name does not match with booking ID")
     elif input_prompt["action"] == options_menu[2]:
         # Modify existing booking
         booking_id = get_booking_id()

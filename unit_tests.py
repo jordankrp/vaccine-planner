@@ -10,6 +10,7 @@ class TestAPI(unittest.TestCase):
     booking_1021 = {
         "booking_id": "1021",
         "name": "Miles Davis",
+        "email": "miles@gmail.com",
         "date": "01-11-2022",
         "time": "10",
     }
@@ -17,6 +18,7 @@ class TestAPI(unittest.TestCase):
     new_booking = {
         "booking_id": "1022",
         "name": "Joe Pass",
+        "email": "joe@gmail.com",
         "date": "15-11-2022",
         "time": "13",
     }
@@ -27,6 +29,7 @@ class TestAPI(unittest.TestCase):
     updated_booking_1021 = {
         "booking_id": "1021",
         "name": "Miles Davis",
+        "email": "miles@gmail.com",
         "date": "30-11-2022",
         "time": "12",
     }
@@ -36,6 +39,7 @@ class TestAPI(unittest.TestCase):
     updated_booking_1012 = {
         "booking_id": "1012",
         "name": "Dizzy Gillespie",
+        "email": "dizzy@gmail.com",
         "date": "29-06-2022",
         "time": "12",
     }
@@ -43,6 +47,7 @@ class TestAPI(unittest.TestCase):
     booking_wrong_date = {
         "booking_id": "1018",
         "name": "Oscar Peterson",
+        "email": "oscar@gmail.com",
         "date": "2022-08-07",
         "time": "11",
     }

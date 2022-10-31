@@ -7,7 +7,13 @@ api = Api(app)
 
 # Give an example booking to start with
 bookings = [
-    {"booking_id": "1021", "name": "Miles Davis", "date": "01-11-2022", "time": "10"}
+    {
+        "booking_id": "1021",
+        "name": "Miles Davis",
+        "email": "miles@gmail.com",
+        "date": "01-11-2022",
+        "time": "10",
+    }
 ]
 
 parser = reqparse.RequestParser()
@@ -20,9 +26,9 @@ class BookingsList(Resource):
         return bookings
 
     def post(self):
-        # TODO Check for clashes with other users
         parser.add_argument("booking_id", type=str)
         parser.add_argument("name", type=str)
+        parser.add_argument("email", type=str)
         parser.add_argument("date", type=str)
         parser.add_argument("time", type=str)
         args = parser.parse_args()
@@ -31,19 +37,20 @@ class BookingsList(Resource):
         if (
             args["booking_id"] is None
             or args["name"] is None
+            or args["email"] is None
             or args["date"] is None
             or args["time"] is None
         ):
-            return "Please provide a booking ID, name, date and time.", 404
+            return "Please provide a booking ID, name, email, date and time.", 404
 
         # Check if name or booking ID already exists
-        else:
-            for booking in bookings:
-                if (
-                    args["name"] == booking["name"]
-                    or args["booking_id"] == booking["booking_id"]
-                ):
-                    return "Booking ID or name already exists.", 404
+
+        for booking in bookings:
+            if (
+                args["name"] == booking["name"]
+                or args["booking_id"] == booking["booking_id"]
+            ):
+                return "Booking ID or name already exists.", 404
 
         # Check if date is in correct format (DD-MM-YYYY)
         try:
@@ -51,11 +58,13 @@ class BookingsList(Resource):
         except ValueError:
             return "Wrong date format, must be in the form dd-mm-yyyy", 404
         else:
+            # Check if time is within opening times
             if args["time"] in opening_times:
                 # Time given by user is within opening times
                 new_booking = {
                     "booking_id": args["booking_id"],
                     "name": args["name"],
+                    "email": args["email"],
                     "date": args["date"],
                     "time": args["time"],
                 }
