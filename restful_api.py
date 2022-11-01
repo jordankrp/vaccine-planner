@@ -44,7 +44,6 @@ class BookingsList(Resource):
             return "Please provide a booking ID, name, email, date and time.", 404
 
         # Check if name or booking ID already exists
-
         for booking in bookings:
             if (
                 args["name"] == booking["name"]

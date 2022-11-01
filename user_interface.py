@@ -95,10 +95,22 @@ def name_auth(bookings, booking_id, name):
     return auth
 
 
+def date_modify_zeros(date):
+    day = date.split("-")[0]
+    month = date.split("-")[1]
+    year = date.split("-")[2]
+    if len(day) == 1:
+        day = "0" + day
+    if len(month) == 1:
+        month = "0" + month
+    return "-".join([day, month, year])
+
+
 def booking_clash(bookings, date, time):
     clash = False
     for booking in bookings:
         # TODO Need to account for 01-11 and 1-11
+        date = date_modify_zeros(date)
         if booking["date"] == date:
             if booking["time"] == time:
                 print("Selected time is already taken on this date")
