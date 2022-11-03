@@ -168,42 +168,67 @@ def delete_booking(booking_id):
         print(delete_req.text)
 
 
+def request_new_booking(bookings):
+    name = get_name()
+    email = get_email()
+    date = get_date()
+    time = get_time()
+    # Check if there is a date / time clash
+    if booking_clash(bookings, date, time):
+        sys.exit()
+    # generate booking ID
+    booking_id = generate_booking_id(bookings)
+    add_new_booking(booking_id, name, email, date, time)
+    # TODO Send email confirmation to user (using Flask mail or similar)
+
+
+def view_booking_details(bookings):
+    booking_id = get_booking_id()
+    name = get_name()
+    if name_auth(bookings, booking_id, name):
+        display_booking(booking_id)
+    else:
+        print("Name does not match with booking ID")
+
+
+def modify_booking(bookings):
+    booking_id = get_booking_id()
+    name = get_name()
+    new_date = get_date()
+    new_time = get_time()
+    # Check if there is a date / time clash
+    if booking_clash(bookings, new_date, new_time):
+        sys.exit()
+    if name_auth(bookings, booking_id, name):
+        update_booking(booking_id, new_date, new_time)
+    else:
+        print("Name does not match with booking ID")
+
+
+def remove_booking(bookings):
+    booking_id = get_booking_id()
+    name = get_name()
+    if name_auth(bookings, booking_id, name):
+        delete_booking(booking_id)
+    else:
+        print("Name does not match with booking ID")
+
+
 if __name__ == "__main__":
 
     input_prompt = None
+    bookings = get_bookings()
     while not input_prompt:
         input_prompt = print_start_screen()
     if input_prompt["action"] == options_menu[0]:
         # Request new booking
-        name = get_name()
-        email = get_email()
-        date = get_date()
-        time = get_time()
-        # Check if there is a date / time clash
-        bookings = get_bookings()
-        if booking_clash(bookings, date, time):
-            sys.exit()
-        # generate booking ID
-        booking_id = generate_booking_id(bookings)
-        add_new_booking(booking_id, name, email, date, time)
-        # Send email confirmation to user (using Flask mail or similar)
+        request_new_booking(bookings)
     elif input_prompt["action"] == options_menu[1]:
         # View existing booking details
-        booking_id = get_booking_id()
-        name = get_name()
-        bookings = get_bookings()
-        # Some sort of name authentication
-        if name_auth(bookings, booking_id, name):
-            display_booking(booking_id)
-        else:
-            print("Name does not match with booking ID")
+        view_booking_details(bookings)
     elif input_prompt["action"] == options_menu[2]:
         # Modify existing booking
-        booking_id = get_booking_id()
-        new_date = get_date()
-        new_time = get_time()
-        update_booking(booking_id, new_date, new_time)
+        modify_booking(bookings)
     elif input_prompt["action"] == options_menu[3]:
         # Delete existing booking
-        booking_id = get_booking_id()
-        delete_booking(booking_id)
+        remove_booking(bookings)
